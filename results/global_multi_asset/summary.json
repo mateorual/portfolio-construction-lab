@@ -1,0 +1,153 @@
+{
+  "config": "global_multi_asset",
+  "period": [
+    "2008-05-01",
+    "2026-10-30"
+  ],
+  "n_rebalances": 222,
+  "transaction_cost_bps": 10,
+  "covariance": "ledoit_wolf",
+  "metrics": {
+    "equal_weight": {
+      "CAGR": 0.057243,
+      "Volatility": 0.108849,
+      "Sharpe": 0.439793,
+      "Sortino": 0.616077,
+      "Max drawdown": -0.345139,
+      "Calmar": 0.165854,
+      "Turnover (1-way, p.a.)": 0.151638,
+      "Effective N (weights)": 12.0,
+      "Effective N (risk)": 8.050913,
+      "Avg max weight": 0.083333,
+      "Diversification ratio": 1.649355,
+      "Solver failures": 0.0
+    },
+    "min_variance": {
+      "CAGR": 0.027173,
+      "Volatility": 0.053691,
+      "Sharpe": 0.270494,
+      "Sortino": 0.378203,
+      "Max drawdown": -0.170118,
+      "Calmar": 0.159733,
+      "Turnover (1-way, p.a.)": 0.59588,
+      "Effective N (weights)": 3.539385,
+      "Effective N (risk)": 3.539388,
+      "Avg max weight": 0.395592,
+      "Diversification ratio": 1.729624,
+      "Solver failures": 0.0
+    },
+    "mean_variance": {
+      "CAGR": 0.058615,
+      "Volatility": 0.183467,
+      "Sharpe": 0.327757,
+      "Sortino": 0.450096,
+      "Max drawdown": -0.441496,
+      "Calmar": 0.132765,
+      "Turnover (1-way, p.a.)": 3.620785,
+      "Effective N (weights)": 1.394424,
+      "Effective N (risk)": 1.287707,
+      "Avg max weight": 0.844577,
+      "Diversification ratio": 1.14302,
+      "Solver failures": 0.0
+    },
+    "black_litterman": {
+      "CAGR": 0.084735,
+      "Volatility": 0.124218,
+      "Sharpe": 0.606619,
+      "Sortino": 0.838896,
+      "Max drawdown": -0.347229,
+      "Calmar": 0.244032,
+      "Turnover (1-way, p.a.)": 1.905413,
+      "Effective N (weights)": 4.534276,
+      "Effective N (risk)": 3.246482,
+      "Avg max weight": 0.34068,
+      "Diversification ratio": 1.454312,
+      "Solver failures": 0.0
+    },
+    "risk_parity": {
+      "CAGR": 0.044914,
+      "Volatility": 0.07067,
+      "Sharpe": 0.462837,
+      "Sortino": 0.648755,
+      "Max drawdown": -0.19484,
+      "Calmar": 0.230515,
+      "Turnover (1-way, p.a.)": 0.22851,
+      "Effective N (weights)": 9.145857,
+      "Effective N (risk)": 12.0,
+      "Avg max weight": 0.180307,
+      "Diversification ratio": 1.965802,
+      "Solver failures": 0.0
+    },
+    "relaxed_risk_parity": {
+      "CAGR": 0.05402,
+      "Volatility": 0.08365,
+      "Sharpe": 0.506803,
+      "Sortino": 0.696117,
+      "Max drawdown": -0.23229,
+      "Calmar": 0.232554,
+      "Turnover (1-way, p.a.)": 1.690007,
+      "Effective N (weights)": 6.56556,
+      "Effective N (risk)": 4.371791,
+      "Avg max weight": 0.292865,
+      "Diversification ratio": 1.856387,
+      "Solver failures": 0.0
+    }
+  },
+  "bootstrap": {
+    "equal_weight": {
+      "Sharpe": 0.439793,
+      "Sharpe CI low": 0.02539,
+      "Sharpe CI high": 0.922932,
+      "dSharpe vs benchmark": 0.0,
+      "dSharpe CI low": NaN,
+      "dSharpe CI high": NaN,
+      "p (dSharpe <= 0)": NaN
+    },
+    "min_variance": {
+      "Sharpe": 0.270494,
+      "Sharpe CI low": -0.209219,
+      "Sharpe CI high": 0.803008,
+      "dSharpe vs benchmark": -0.169299,
+      "dSharpe CI low": -0.468065,
+      "dSharpe CI high": 0.123688,
+      "p (dSharpe <= 0)": 0.8665
+    },
+    "mean_variance": {
+      "Sharpe": 0.327757,
+      "Sharpe CI low": -0.090414,
+      "Sharpe CI high": 0.743905,
+      "dSharpe vs benchmark": -0.112037,
+      "dSharpe CI low": -0.610057,
+      "dSharpe CI high": 0.348077,
+      "p (dSharpe <= 0)": 0.6925
+    },
+    "black_litterman": {
+      "Sharpe": 0.606619,
+      "Sharpe CI low": 0.182859,
+      "Sharpe CI high": 1.059414,
+      "dSharpe vs benchmark": 0.166826,
+      "dSharpe CI low": -0.026679,
+      "dSharpe CI high": 0.345479,
+      "p (dSharpe <= 0)": 0.0485
+    },
+    "risk_parity": {
+      "Sharpe": 0.462837,
+      "Sharpe CI low": -0.006577,
+      "Sharpe CI high": 0.976472,
+      "dSharpe vs benchmark": 0.023043,
+      "dSharpe CI low": -0.174771,
+      "dSharpe CI high": 0.218856,
+      "p (dSharpe <= 0)": 0.431
+    },
+    "relaxed_risk_parity": {
+      "Sharpe": 0.506803,
+      "Sharpe CI low": 0.036604,
+      "Sharpe CI high": 0.994129,
+      "dSharpe vs benchmark": 0.06701,
+      "dSharpe CI low": -0.226567,
+      "dSharpe CI high": 0.324211,
+      "p (dSharpe <= 0)": 0.3345
+    }
+  },
+  "runtime_seconds": 334.0
+}

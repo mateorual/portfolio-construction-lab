@@ -1,0 +1,90 @@
+# Indian large-cap equities (INR), NSE listings.
+# Twenty of today's largest NIFTY 50 constituents with history back to 2009.
+# NOTE: selecting *today's* large caps introduces survivorship bias that favours
+# all strategies equally; see the README limitations section.
+
+name: india_equities
+title: Indian large-cap equities
+description: >
+  Twenty NSE large caps across six sectors. A single-asset-class universe with
+  high, fairly homogeneous correlations - the harder case for diversification.
+currency: INR
+
+universe:
+  HDFCBANK.NS:   {name: HDFC Bank,            group: Financials}
+  ICICIBANK.NS:  {name: ICICI Bank,           group: Financials}
+  SBIN.NS:       {name: State Bank of India,  group: Financials}
+  KOTAKBANK.NS:  {name: Kotak Mahindra Bank,  group: Financials}
+  AXISBANK.NS:   {name: Axis Bank,            group: Financials}
+  TCS.NS:        {name: Tata Consultancy,     group: IT}
+  INFY.NS:       {name: Infosys,              group: IT}
+  HCLTECH.NS:    {name: HCL Technologies,     group: IT}
+  WIPRO.NS:      {name: Wipro,                group: IT}
+  RELIANCE.NS:   {name: Reliance Industries,  group: Energy & materials}
+  ULTRACEMCO.NS: {name: UltraTech Cement,     group: Energy & materials}
+  HINDUNILVR.NS: {name: Hindustan Unilever,   group: Consumer}
+  ITC.NS:        {name: ITC,                  group: Consumer}
+  NESTLEIND.NS:  {name: Nestle India,         group: Consumer}
+  ASIANPAINT.NS: {name: Asian Paints,         group: Consumer}
+  TITAN.NS:      {name: Titan Company,        group: Consumer}
+  MARUTI.NS:     {name: Maruti Suzuki,        group: Consumer}
+  LT.NS:         {name: Larsen & Toubro,      group: Industrials & telecom}
+  BHARTIARTL.NS: {name: Bharti Airtel,        group: Industrials & telecom}
+  SUNPHARMA.NS:  {name: Sun Pharmaceutical,   group: Healthcare}
+
+data:
+  start: "2009-01-01"
+  end: "2026-11-01"
+  # A flat 6.5% p.a. approximates the average 91-day T-bill yield over the sample.
+  risk_free: {constant: 0.065}
+  market_caps:
+    # cap_t = (current shares outstanding) x price_t. Holds share counts fixed,
+    # so it ignores issuance/buybacks - adequate for a BL *prior*.
+    method: shares_outstanding
+
+backtest:
+  lookback_days: 252
+  rebalance: monthly
+  transaction_cost_bps: 15    # wider than US ETFs (spread + STT + impact)
+  periods_per_year: 252
+
+estimation:
+  covariance: ledoit_wolf
+  ewma_halflife: 63
+  risk_aversion: 2.5
+  momentum_lookback: 252
+  momentum_skip: 21
+
+constraints:
+  min_weight: 0.0
+  max_weight: 1.0
+
+strategies:
+  - id: equal_weight
+    label: Equal weight (1/N)
+    kind: equal_weight
+  - id: min_variance
+    label: Minimum variance
+    kind: min_variance
+  - id: mean_variance
+    label: Mean-variance (sample mean)
+    kind: mean_variance
+  - id: black_litterman
+    label: Black-Litterman (momentum views)
+    kind: black_litterman
+    params: {tau: 0.05, information_coefficient: 0.10, view_confidence: 1.0}
+  - id: risk_parity
+    label: Risk parity (ERC)
+    kind: risk_parity
+  - id: relaxed_risk_parity
+    label: Relaxed risk parity
+    kind: relaxed_risk_parity
+    params: {return_premium: 0.25, lam: 0.0, mu_source: historical}
+
+experiments:
+  covariance_ablation: [sample, ledoit_wolf, ewma]
+  cost_sensitivity_bps: [0, 5, 15, 25, 50]
+  bootstrap_samples: 2000
+  bootstrap_block: 21
+  resampling_draws: 300
+  seed: 7

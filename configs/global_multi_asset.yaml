@@ -1,0 +1,95 @@
+# Global multi-asset ETF universe (USD).
+# Twelve liquid ETFs spanning equities, government bonds, credit and real assets.
+# Starts in 2006 so that the first out-of-sample year (2008) includes the GFC.
+
+name: global_multi_asset
+title: Global multi-asset ETFs
+description: >
+  Twelve US-listed ETFs covering global equities, Treasuries, credit and real assets.
+  A setting where asset volatilities differ by an order of magnitude, so capital
+  allocation and risk allocation diverge sharply.
+currency: USD
+
+universe:
+  SPY: {name: US large-cap equity,        group: Equity}
+  IWM: {name: US small-cap equity,        group: Equity}
+  EFA: {name: Developed ex-US equity,     group: Equity}
+  EEM: {name: Emerging-market equity,     group: Equity}
+  IEF: {name: 7-10y US Treasuries,        group: Government bonds}
+  TLT: {name: 20y+ US Treasuries,         group: Government bonds}
+  TIP: {name: US TIPS,                    group: Government bonds}
+  LQD: {name: US investment-grade credit, group: Credit}
+  HYG: {name: US high-yield credit,       group: Credit}
+  VNQ: {name: US REITs,                   group: Real assets}
+  GLD: {name: Gold,                       group: Real assets}
+  DBC: {name: Broad commodities,          group: Real assets}
+
+data:
+  start: "2006-01-01"
+  end: "2026-11-01"
+  risk_free: {ticker: "^IRX"}          # 13-week T-bill yield
+  market_caps:
+    # "Market cap" is ill-defined for ETFs. The prior is an illustrative global
+    # market portfolio, loosely following the asset-class shares in
+    # Doeswijk, Lam & Swinkels (2014): ~50% equity, ~40% bonds, ~10% real assets.
+    method: fixed
+    weights:
+      SPY: 0.27
+      IWM: 0.03
+      EFA: 0.13
+      EEM: 0.06
+      IEF: 0.17
+      TLT: 0.06
+      TIP: 0.03
+      LQD: 0.12
+      HYG: 0.03
+      VNQ: 0.04
+      GLD: 0.04
+      DBC: 0.02
+
+backtest:
+  lookback_days: 252          # one year of daily returns for every estimate
+  rebalance: monthly          # last trading day of each month
+  transaction_cost_bps: 10    # per unit of traded notional (one side)
+  periods_per_year: 252
+
+estimation:
+  covariance: ledoit_wolf     # default estimator (ablation below compares others)
+  ewma_halflife: 63
+  risk_aversion: 2.5          # delta, shared by reverse optimisation and MV utility
+  momentum_lookback: 252
+  momentum_skip: 21
+
+constraints:
+  min_weight: 0.0             # long-only
+  max_weight: 1.0             # no caps: let each method show its natural behaviour
+
+strategies:
+  - id: equal_weight
+    label: Equal weight (1/N)
+    kind: equal_weight
+  - id: min_variance
+    label: Minimum variance
+    kind: min_variance
+  - id: mean_variance
+    label: Mean-variance (sample mean)
+    kind: mean_variance
+  - id: black_litterman
+    label: Black-Litterman (momentum views)
+    kind: black_litterman
+    params: {tau: 0.05, information_coefficient: 0.10, view_confidence: 1.0}
+  - id: risk_parity
+    label: Risk parity (ERC)
+    kind: risk_parity
+  - id: relaxed_risk_parity
+    label: Relaxed risk parity
+    kind: relaxed_risk_parity
+    params: {return_premium: 0.25, lam: 0.0, mu_source: historical}
+
+experiments:
+  covariance_ablation: [sample, ledoit_wolf, ewma]
+  cost_sensitivity_bps: [0, 5, 10, 25, 50]
+  bootstrap_samples: 2000
+  bootstrap_block: 21
+  resampling_draws: 300
+  seed: 7
